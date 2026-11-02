@@ -39,4 +39,4 @@
 
 ## 修改工作流
 
-两个工作流的提示词都在 `build.py` 里。在那里修改后运行 `python build.py`，会重写两个 JSON 文件。`tests/` 里有 7 张回归测试图和运行脚本，见 [tests/README.md](tests/README.md)。
+两个工作流的提示词都在 `build.py` 里。在那里修改后运行 `python build.py`，会重写两个 JSON 文件。`tests/` 里有 5 张回归测试图和运行脚本，见 [tests/README.md](tests/README.md)。

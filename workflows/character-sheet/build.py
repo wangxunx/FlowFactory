@@ -1,16 +1,12 @@
 """Regenerates character-sheet-from-image.json and character-sheet-from-text.json in this folder. Edit the prompts below, then run: python build.py"""
 
 import json
+import sys
 from pathlib import Path
 
 OUT_DIR = Path(__file__).parent
-QWEN = "AMDQwenImage21TextToImage"
-TURBO = "Qwen-Image-2.1-Turbo"
-# cnr_id and ver let ComfyUI find the node pack to install when a node is missing.
-QWEN_PACK = {"cnr_id": "amd-qwen-image-21", "ver": "2.0.1"}
-COMFY_CORE = {"cnr_id": "comfy-core", "ver": "0.39.0"}
-REGISTRATION_URL = "https://h3.oneclickamd.ai/?src=character-sheet"
-COLOR, BGCOLOR = "#432", "#653"
+sys.path.insert(0, str(OUT_DIR.parents[1] / "scripts"))
+from graph import SOURCE, SOURCE_ZH, Graph, key_setup  # noqa: E402
 
 KEEP = ("Keep exactly the same character: same face, hairstyle, ears, outfit, colors, body proportions and art style, "
         "and any item the character holds or carries. Whole body visible from head to toes at the same scale, "
@@ -61,16 +57,7 @@ EXPRESSIONS = [
     ("Smug", "confident smug smirk with one raised eyebrow"),
 ]
 
-KEY_SETUP = (
-    "**One-time setup.** This workflow uses the Video Factory Qwen-Image 2.1 node; if ComfyUI reports it missing, "
-    "install it from the Manager. Register at " + REGISTRATION_URL + ", then save your key to `h3_gateway_api_key.txt` in the ComfyUI user directory (or set `H3_GATEWAY_API_KEY`). "
-    "On the Windows Desktop app use the file, for example "
-    "`C:\\Users\\<you>\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Installs\\ComfyUI\\ComfyUI\\user\\h3_gateway_api_key.txt`. "
-    "If the key is missing, the first node fails right away and names the exact file it looked for.\n\n"
-    "**Your key is not in this workflow**, so the workflow and the saved sheet are safe to share."
-)
-SOURCE = "**From FlowFactory:** more ready-to-run workflows at https://github.com/wangxunx/FlowFactory"
-SOURCE_ZH = "更多开箱即用的工作流见 FlowFactory：https://github.com/wangxunx/FlowFactory"
+KEY_SETUP = key_setup("character-sheet")
 COMMON_NOTES = (
     "**What you get** in `output/character_sheet/`:\n\n"
     "- `sheet_*.png`: front, three-quarter, side and back views on top, six expressions below\n"
@@ -109,71 +96,22 @@ NOTE_FROM_TEXT = (
 )
 
 
-class Graph:
-    def __init__(self):
-        self.nodes = []
-        self.links = []
-
-    def node(self, type_, pos, size, inputs, outputs, widgets, title=None, colored=False):
-        node_id = len(self.nodes) + 1
-        node = {
-            "id": node_id, "type": type_, "pos": list(pos), "size": list(size), "flags": {}, "order": node_id - 1,
-            "mode": 0, "inputs": [{"name": n, "type": t, "link": None, **({"shape": 7} if opt else {})} for n, t, opt in inputs],
-            "outputs": [{"name": n, "type": t, "links": []} for n, t in outputs],
-            "properties": {} if type_ == "MarkdownNote" else {**(QWEN_PACK if type_ == QWEN else COMFY_CORE), "Node name for S&R": type_},
-            "widgets_values": widgets,
-        }
-        if title:
-            node["title"] = title
-        if colored:
-            node["color"], node["bgcolor"] = COLOR, BGCOLOR
-        self.nodes.append(node)
-        return node_id
-
-    def link(self, src, src_slot, dst, dst_input):
-        link_id = len(self.links) + 1
-        dst_node = self.nodes[dst - 1]
-        slot = next(i for i, inp in enumerate(dst_node["inputs"]) if inp["name"] == dst_input)
-        out = self.nodes[src - 1]["outputs"][src_slot]
-        dst_node["inputs"][slot]["link"] = link_id
-        out["links"].append(link_id)
-        self.links.append([link_id, src, src_slot, dst, slot, out["type"]])
-
-    def qwen(self, pos, title, prompt, aspect_ratio, refs):
-        # Autogrow shows one empty socket after the connected ones, up to three.
-        inputs = [(f"images.image_{i}", "IMAGE", True) for i in range(1, min(refs + 1, 3) + 1)]
-        return self.node(QWEN, pos, (400, 300), inputs, [("IMAGE", "IMAGE")], [prompt, aspect_ratio, TURBO],
-                         title=title, colored=True)
-
-    def stitch(self, pos, a, b, direction):
-        node_id = self.node("ImageStitch", pos, (270, 150), [("image1", "IMAGE", False), ("image2", "IMAGE", True)],
-                            [("IMAGE", "IMAGE")], [direction, True, 0, "white"])
-        self.link(a, 0, node_id, "image1")
-        self.link(b, 0, node_id, "image2")
-        return node_id
-
-
 def build(from_image):
     g = Graph()
-    groups = []
-
-    def group(title, x, y, w, h, color):
-        groups.append({"id": len(groups) + 1, "title": title, "bounding": [x, y, w, h], "color": color, "font_size": 24, "flags": {}})
-
     note_text = NOTE_FROM_IMAGE if from_image else NOTE_FROM_TEXT
     g.node("MarkdownNote", (-560, 0), (500, 980), [], [], [note_text], colored=True)
 
     if from_image:
-        group("1. Your character", 0, -60, 420, 520, "#3f789e")
+        g.group("1. Your character", 0, -60, 420, 520, "#3f789e")
         load = g.node("LoadImage", (20, 0), (380, 440), [], [("IMAGE", "IMAGE"), ("MASK", "MASK")], ["character_sheet_model.jpg", "image"])
-        group("2. Clean front view", 460, -60, 440, 380, "#3f789e")
+        g.group("2. Clean front view", 460, -60, 440, 380, "#3f789e")
         front = g.qwen((480, 0), "Front view", FRONT_FROM_IMAGE, "9:16", 1)
         g.link(load, 0, front, "images.image_1")
     else:
-        group("1. Describe your character", 460, -60, 440, 380, "#3f789e")
+        g.group("1. Describe your character", 460, -60, 440, 380, "#3f789e")
         front = g.qwen((480, 0), "Front view", FRONT_FROM_TEXT, "9:16", 0)
 
-    group("3. Turnaround views", 940, -60, 440, 1140, "#8A8")
+    g.group("3. Turnaround views", 940, -60, 440, 1140, "#8A8")
     views = []
     for i, (title, text) in enumerate(VIEWS):
         use_original = from_image and title == "Back view"
@@ -183,14 +121,14 @@ def build(from_image):
             g.link(load, 0, n, "images.image_2")
         views.append(n)
 
-    group("4. Expressions", 1420, -60, 880, 1140, "#b58b2a")
+    g.group("4. Expressions", 1420, -60, 880, 1140, "#b58b2a")
     expressions = []
     for i, (title, text) in enumerate(EXPRESSIONS):
         n = g.qwen((1440 + (i // 3) * 430, (i % 3) * 360), title, EXPRESSION_HEAD + text + ".", "1:1", 1)
         g.link(front, 0, n, "images.image_1")
         expressions.append(n)
 
-    group("5. Sheet", 2340, -60, 960, 1140, "#a1309b")
+    g.group("5. Sheet", 2340, -60, 960, 1140, "#a1309b")
     x = 2360
     row = g.stitch((x, 0), front, views[0], "right")
     row = g.stitch((x, 180), row, views[1], "right")
@@ -202,19 +140,9 @@ def build(from_image):
     grid = g.stitch((x + 300, 920), top, bottom, "down")
     sheet = g.stitch((x + 300, 0), row, grid, "down")
 
-    save_sheet = g.node("SaveImage", (x + 600, 0), (340, 560), [("images", "IMAGE", False)], [], ["character_sheet/sheet"],
-                        title="Save character sheet")
-    g.link(sheet, 0, save_sheet, "images")
-    save_front = g.node("SaveImage", (x + 600, 620), (340, 440), [("images", "IMAGE", False)], [], ["character_sheet/front"],
-                        title="Save front view")
-    g.link(front, 0, save_front, "images")
-
-    workflow = {
-        "last_node_id": len(g.nodes), "last_link_id": len(g.links), "nodes": g.nodes, "links": g.links,
-        "groups": groups, "config": {}, "extra": {"ds": {"scale": 0.55, "offset": [700, 160]}}, "version": 0.4,
-    }
-    return workflow
-
+    g.save((x + 600, 0), (340, 560), sheet, "character_sheet/sheet", "Save character sheet")
+    g.save((x + 600, 620), (340, 440), front, "character_sheet/front", "Save front view")
+    return g.workflow(0.55, (700, 160))
 
 for from_image, name in [(True, "character-sheet-from-image"), (False, "character-sheet-from-text")]:
     (OUT_DIR / f"{name}.json").write_text(json.dumps(build(from_image), indent=2, ensure_ascii=False) + "\n")

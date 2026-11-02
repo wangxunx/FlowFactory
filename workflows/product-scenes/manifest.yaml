@@ -1,0 +1,18 @@
+id: product-scenes
+name: Product Scenes
+version: 1.0.0
+category:
+  - ecommerce
+tags:
+  - image
+  - product-photography
+  - main-image
+  - qwen-image
+node_pack: amd-qwen-image-21
+min_node_pack_version: 2.0.0
+featured: true
+files:
+  - workflow: product-scenes.json
+    title: Product Scenes
+sample_inputs:
+  - assets/product_sample.jpg

@@ -15,6 +15,14 @@ ComfyUI core nodes plus the AMD Video Factory nodes, so no GPU and no model down
 
 ![Character Sheet](workflows/character-sheet/assets/from_image_example.jpg)
 
+### E-commerce
+
+| Workflow | What it does | Video Factory node |
+|---|---|---|
+| [Product Scenes](workflows/product-scenes/) | One phone photo of a product becomes eight product images: a white-background main image, studio, tabletop, in-hand, close-up, outdoor and festive scenes | Qwen-Image 2.1 |
+
+![Product Scenes](workflows/product-scenes/assets/example.jpg)
+
 ## Video Factory nodes
 
 The workflows call cloud models through the AMD Video Factory nodes. Install the pack a workflow needs from the
@@ -45,7 +53,7 @@ Each workflow lives in its own folder under `workflows/`:
 | `*.json` | The ComfyUI workflows |
 | `*.jpg` | Thumbnail for the workflow JSON with the same name |
 | `README.md` | Usage and known limits |
-| `build.py` | Optional. Regenerates the JSON when the workflow is written as a script |
+| `build.py` | Optional. Regenerates the JSON when the workflow is written as a script, using `scripts/graph.py` |
 
 Workflows are grouped by what the user wants to make, not by model or by image and video. `category` in the manifest
 lists one or more of these IDs; the first one decides the section the workflow is listed under above. Put the output

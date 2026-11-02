@@ -14,6 +14,14 @@
 
 ![角色设定图](workflows/character-sheet/assets/from_image_example.jpg)
 
+### 电商与营销
+
+| 工作流 | 作用 | Video Factory 节点 |
+|---|---|---|
+| [商品场景图](workflows/product-scenes/) | 一张手机拍的商品照生成八张商品图：白底主图、棚拍、桌面、手持、细节特写、户外、节日等场景 | Qwen-Image 2.1 |
+
+![商品场景图](workflows/product-scenes/assets/example.jpg)
+
 ## Video Factory 节点
 
 工作流通过 AMD Video Factory 节点调用云端模型。用 ComfyUI Manager 安装工作流需要的节点包；也可以直接打开工作流，缺节点时 ComfyUI 会提示安装。
@@ -41,7 +49,7 @@
 | `*.json` | ComfyUI 工作流 |
 | `*.jpg` | 同名工作流 JSON 的缩略图 |
 | `README.md` | 使用方法和已知限制 |
-| `build.py` | 可选。工作流用脚本生成时，用它重新生成 JSON |
+| `build.py` | 可选。工作流用脚本生成时，用它（借助 `scripts/graph.py`）重新生成 JSON |
 
 工作流按用户要完成的事情分类，不按模型，也不按图像或视频分。manifest 里的 `category` 从下面的 ID 中选一个或多个，第一个决定工作流列在上面哪一节。输出类型（如 `image`、`video`）写进 `tags`。
 

@@ -1,0 +1,908 @@
+{
+  "last_node_id": 18,
+  "last_link_id": 16,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        -560,
+        0
+      ],
+      "size": [
+        500,
+        1000
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "## Product Scenes\n\nTurns one photo of a product, even a quick phone snapshot, into eight product images: a white-background main image, a studio hero shot, a tabletop scene, a sunlit leaf-shadow shot, an in-hand shot, a close-up, and outdoor and festive scenes. The product's shape, colors, logo and label text stay the same in every image, and each scene relights it to match.\n\n**How to use:** load your product photo in **Load Image** and run. One product per photo, with its label in view, works best. The sample is a generated phone photo.\n\n**What you get** in `output/product_scenes/`: one square image per scene, named after it (`white_background_*.png`, `studio_*.png`, ...). Square suits marketplace main images; set a node's `aspect_ratio` to `3:4` or `9:16` for social posts.\n\n**Change a scene:** the first sentence of each prompt describes the scene, so rewrite it to fit your brand, for example a Lunar New Year table instead of a holiday gift. Keep the rest of the prompt: it keeps the product, its label and its lighting right. Run again and only the changed scenes are regenerated.\n\n**Model:** every node uses `Qwen-Image-2.1-Turbo`, and all eight run in parallel. Switch a node to `Qwen-Image-2.1` to get the `steps` slider.\n\n**One-time setup.** This workflow uses the Video Factory Qwen-Image 2.1 node; if ComfyUI reports it missing, install it from the Manager. Register at https://h3.oneclickamd.ai/?src=product-scenes, then save your key to `h3_gateway_api_key.txt` in the ComfyUI user directory (or set `H3_GATEWAY_API_KEY`). On the Windows Desktop app use the file, for example `C:\\Users\\<you>\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Installs\\ComfyUI\\ComfyUI\\user\\h3_gateway_api_key.txt`. If the key is missing, the first node fails right away and names the exact file it looked for.\n\n**Your key is not in this workflow**, so the workflow and the images it saves are safe to share.\n\n**From FlowFactory:** more ready-to-run workflows at https://github.com/wangxunx/FlowFactory\n\n---\n\n**中文说明：** 在 Load Image 里换成你的商品照片（手机随手拍即可），直接运行。一张图放一件商品、标签朝向镜头效果最好。输出在 `output/product_scenes/`，每个场景一张方图：白底主图、展台棚拍、桌面生活场景、阳光树影、手持、细节特写、户外、节日。商品的外形、颜色、logo 和标签文字在每张图里保持不变，光影随场景重新匹配。方图适合电商主图；发小红书或抖音可把节点的 `aspect_ratio` 改成 `3:4` 或 `9:16`。想换场景，只改提示词的第一句（例如把节日礼物改成春节年货），其余文字负责保持商品、标签和光影，不要删。再次运行时只重新生成改过的场景。\n\n更多开箱即用的工作流见 FlowFactory：https://github.com/wangxunx/FlowFactory"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        20,
+        0
+      ],
+      "size": [
+        380,
+        500
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1,
+            3,
+            5,
+            7,
+            9,
+            11,
+            13,
+            15
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "product_sample.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        480,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 1,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "E-commerce main image: the product from the image alone on a pure white background, centered and filling about 85% of the frame, facing the camera so its front and label are clearly visible. Soft, even studio lighting and a faint natural shadow under the product. No props. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "White background",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 4,
+      "type": "SaveImage",
+      "pos": [
+        900,
+        0
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/white_background"
+      ],
+      "title": "Save white background"
+    },
+    {
+      "id": 5,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        480,
+        380
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 3,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Hero shot: place the product from the image on a simple round podium in a minimal studio, with a smooth seamless backdrop in a soft color that complements the product's colors. Soft key light from one side and a gentle rim light that outlines the product. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Studio podium",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 6,
+      "type": "SaveImage",
+      "pos": [
+        900,
+        380
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/studio"
+      ],
+      "title": "Save studio podium"
+    },
+    {
+      "id": 7,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        480,
+        760
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 5,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Lifestyle shot: replace the background with a cozy, modern home, and place the product from the image on a light wooden table there, with a small green plant, a folded linen cloth and a ceramic cup arranged behind it, never covering it. Warm morning sunlight from a window, softly blurred background. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Tabletop",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 8,
+      "type": "SaveImage",
+      "pos": [
+        900,
+        760
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 6
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/tabletop"
+      ],
+      "title": "Save tabletop"
+    },
+    {
+      "id": 9,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        480,
+        1140
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 7,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Minimal sunlit shot: replace the background with a smooth warm beige stone surface and a matching plain wall, and place the product from the image on the stone. Bright direct sunlight casts soft, natural shadows of palm leaves across the wall, the surface and the product. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Leaf shadows",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        900,
+        1140
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 8
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/leaf_shadows"
+      ],
+      "title": "Save leaf shadows"
+    },
+    {
+      "id": 11,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1240,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 9,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Replace the background with a bright, softly blurred indoor setting, and show a person's hand naturally holding the product from the image at its real size, by its handle if it has one. Only the hand and part of the forearm are visible, with natural skin and neat nails. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "In hand",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 12,
+      "type": "SaveImage",
+      "pos": [
+        1660,
+        0
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/in_hand"
+      ],
+      "title": "Save in hand"
+    },
+    {
+      "id": 13,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1240,
+        380
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 11,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Macro detail shot in a photo studio: the camera moves in very close to the product from the image, so its logo or label and the surrounding material fill most of the frame and the texture and finish are seen up close; parts of the product may extend past the edges. The background is a smooth, softly blurred warm grey studio backdrop with nothing else in it. Very shallow depth of field and soft directional light that brings out the texture. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Close-up detail",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 14,
+      "type": "SaveImage",
+      "pos": [
+        1660,
+        380
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/detail"
+      ],
+      "title": "Save close-up detail"
+    },
+    {
+      "id": 15,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1240,
+        760
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 13,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Outdoor shot: place the product from the image outdoors in a natural setting that suits it, for example on a sunlit stone, a wooden bench in a park, or on sand, in warm golden-hour sunlight with a softly blurred background. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Outdoor",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 16,
+      "type": "SaveImage",
+      "pos": [
+        1660,
+        760
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/outdoor"
+      ],
+      "title": "Save outdoor"
+    },
+    {
+      "id": 17,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1240,
+        1140
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 15,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Festive shot: the product from the image as the centerpiece of a holiday gift arrangement, with wrapped gift boxes, ribbons and a few seasonal decorations around it, and warm bokeh lights in the background. Cozy warm light. Keep the product exactly as it is in the image: the same shape and proportions, colors, materials and finish, and the same logo and printed text, sharp and legible. Do not redesign, recolor or add anything to the product, and show only one of it. Professional commercial product photograph, photorealistic, high detail, the product in sharp focus. The lighting on the product matches the scene, with natural highlights and reflections on its surfaces and a soft contact shadow where it rests. No added text, logos or watermarks.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Festive gift",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 18,
+      "type": "SaveImage",
+      "pos": [
+        1660,
+        1140
+      ],
+      "size": [
+        300,
+        340
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 16
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "product_scenes/festive"
+      ],
+      "title": "Save festive gift"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      5,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      2,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      2,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      2,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      11,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      2,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      2,
+      0,
+      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      14,
+      15,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      2,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      16,
+      17,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. Your product",
+      "bounding": [
+        0,
+        -60,
+        420,
+        580
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. Product images",
+      "bounding": [
+        460,
+        -60,
+        1520,
+        1560
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [
+        700,
+        160
+      ]
+    }
+  },
+  "version": 0.4
+}

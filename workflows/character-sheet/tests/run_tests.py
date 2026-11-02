@@ -11,6 +11,7 @@ front views instead of generating them again."""
 import argparse
 import io
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -19,27 +20,8 @@ from PIL import Image
 
 ROOT = Path(__file__).parent
 WORKFLOW = ROOT.parent / "character-sheet-from-image.json"
-WIDGETS = {
-    "AMDQwenImage21TextToImage": ["prompt", "aspect_ratio", "model", "model.steps"],
-    "ImageStitch": ["direction", "match_image_size", "spacing_width", "spacing_color"],
-    "LoadImage": ["image"],
-    "SaveImage": ["filename_prefix"],
-}
-
-
-def to_api(workflow):
-    links = {link[0]: link for link in workflow["links"]}
-    prompt = {}
-    for node in workflow["nodes"]:
-        if node["type"] not in WIDGETS:
-            continue
-        inputs = dict(zip(WIDGETS[node["type"]], node["widgets_values"]))
-        for i in node["inputs"]:
-            if i["link"] is not None:
-                link = links[i["link"]]
-                inputs[i["name"]] = [str(link[1]), link[2]]
-        prompt[str(node["id"])] = {"class_type": node["type"], "inputs": inputs, "_meta": {"title": node.get("title", node["type"])}}
-    return prompt
+sys.path.insert(0, str(ROOT.parents[2] / "scripts"))
+from graph import to_api  # noqa: E402
 
 
 def panels_only(prompt, panels):
