@@ -1,0 +1,1419 @@
+{
+  "last_node_id": 23,
+  "last_link_id": 31,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        -560,
+        0
+      ],
+      "size": [
+        500,
+        980
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "## Character Sheet from an image\n\nTurns one picture of a character (a photo, an illustration, or even a rough doodle) into a character sheet: four turnaround views and six expressions, stitched into one image.\n\n**How to use:** load your picture in **Load Image** and run. The sample is a generated street photo; the workflow removes the background and keeps the photo look. One character per picture works best; if only the upper body is visible, the legs and shoes are invented.\n\n**What you get** in `output/character_sheet/`:\n\n- `sheet_*.png`: front, three-quarter, side and back views on top, six expressions below\n- `front_*.png`: the clean front view on its own, a good first frame or reference for image-to-video\n\n**Time:** 10 images per run. The three views run in parallel, then the six expressions run in parallel, so a run usually takes a few minutes.\n\n**Redo one panel:** edit that node's prompt (even one word) and run again. Only the changed panel and the sheet are regenerated; the other panels come from the cache.\n\n**Model:** every node uses `Qwen-Image-2.1-Turbo`, which runs about twice as fast as the base model. Switch a node to `Qwen-Image-2.1` to get the `steps` slider.\n\n**One-time setup.** This workflow uses the Video Factory Qwen-Image 2.1 node; if ComfyUI reports it missing, install it from the Manager. Register at https://h3.oneclickamd.ai/?src=character-sheet, then save your key to `h3_gateway_api_key.txt` in the ComfyUI user directory (or set `H3_GATEWAY_API_KEY`). On the Windows Desktop app use the file, for example `C:\\Users\\<you>\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Installs\\ComfyUI\\ComfyUI\\user\\h3_gateway_api_key.txt`. If the key is missing, the first node fails right away and names the exact file it looked for.\n\n**Your key is not in this workflow**, so the workflow and the saved sheet are safe to share.\n\n**From FlowFactory:** more ready-to-run workflows at https://github.com/wangxunx/FlowFactory\n\n---\n\n**中文说明：** 在 Load Image 里换成你的角色图（照片、插画、草图都行），直接运行即可。输出在 `output/character_sheet/`：`sheet` 是完整设定图（上面四视图，下面六个表情），`front` 是单独的正面全身图，可直接作为图生视频的首帧。每次运行生成 10 张图。想重做某一格，改一下那个节点的提示词再运行，其他格子走缓存，不会重新生成。\n\n更多开箱即用的工作流见 FlowFactory：https://github.com/wangxunx/FlowFactory"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        20,
+        0
+      ],
+      "size": [
+        380,
+        440
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1,
+            5
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "character_sheet_model.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        480,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 1,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            31
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Character design reference sheet panel. Redraw the character from the image as a clean full-body front view. Keep exactly the same face, hairstyle, ears, outfit, colors and body proportions. If the input is a rough drawing, render it as a clean, polished illustration; if it is a photo, keep it photorealistic. Standing upright with the body, head and eyes squarely facing the viewer and looking straight ahead, shoulders level, arms relaxed at the sides, toes pointing toward the viewer, feet slightly apart, calm neutral expression. Keep any item the character holds or carries. Show the whole body from head to toes, centered, on a plain pure white background with soft even studio lighting. No text, no background objects, no extra characters.",
+        "9:16",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Front view",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 4,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        960,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 2,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            13
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Turn the whole character 45 degrees toward the left side of the image, a classic three-quarter view halfway between the front view and a side profile. Head, chest, hips and feet all turn together: the far side of the face is partly hidden behind the nose, the far shoulder and arm are partly hidden behind the body, and the toes point toward the lower left corner of the image. Standing upright with arms relaxed. Keep exactly the same character: same face, hairstyle, ears, outfit, colors, body proportions and art style, and any item the character holds or carries. Whole body visible from head to toes at the same scale, centered, on a plain pure white background with the same soft even lighting. No text.",
+        "9:16",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Three-quarter view",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 5,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        960,
+        360
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 3,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Show the character in a strict side profile view facing the left side of the image, standing upright with arms relaxed, only one side of the face visible. Keep exactly the same character: same face, hairstyle, ears, outfit, colors, body proportions and art style, and any item the character holds or carries. Whole body visible from head to toes at the same scale, centered, on a plain pure white background with the same soft even lighting. No text.",
+        "9:16",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Side view",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 6,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        960,
+        720
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 4,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": 5,
+          "shape": 7
+        },
+        {
+          "name": "images.image_3",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Turn the character's entire body 180 degrees so we see the character from directly behind, in a full back view. Everything faces away from the viewer: the back of the head and hair, the back of the outfit, the backs of the legs and knees, and the heels of the shoes; the toes point away from the viewer. The face and everything on the front of the character, such as a beard, buttons or front decorations, are hidden. Anything worn on the back, such as a cape, hood, backpack or tail, is clearly visible. If the character has a tail, the whole tail is shown attached to the lower back and clearly visible against the white background. Standing upright with arms relaxed, feet slightly apart. The second image is the original picture of the same character; use it only to see details that the first image hides, such as a backpack, cape or tail. Keep exactly the same character: same face, hairstyle, ears, outfit, colors, body proportions and art style, and any item the character holds or carries. Whole body visible from head to toes at the same scale, centered, on a plain pure white background with the same soft even lighting. No text.",
+        "9:16",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Back view",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 7,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1440,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 6,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Head-and-shoulders close-up portrait of exactly the same character facing the viewer: same face, hairstyle, ears, outfit and art style, on a plain pure white background with soft even lighting. No text. Expression: big joyful laugh with eyes squinted.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Happy",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 8,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1440,
+        360
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 7,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Head-and-shoulders close-up portrait of exactly the same character facing the viewer: same face, hairstyle, ears, outfit and art style, on a plain pure white background with soft even lighting. No text. Expression: sad, teary eyes, downturned mouth.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Sad",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 9,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1440,
+        720
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 8,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Head-and-shoulders close-up portrait of exactly the same character facing the viewer: same face, hairstyle, ears, outfit and art style, on a plain pure white background with soft even lighting. No text. Expression: angry, furrowed brows, gritted teeth.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Angry",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 10,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1870,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 9,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            22
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Head-and-shoulders close-up portrait of exactly the same character facing the viewer: same face, hairstyle, ears, outfit and art style, on a plain pure white background with soft even lighting. No text. Expression: surprised, wide open eyes and open mouth.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Surprised",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 11,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1870,
+        360
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 10,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            23
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Head-and-shoulders close-up portrait of exactly the same character facing the viewer: same face, hairstyle, ears, outfit and art style, on a plain pure white background with soft even lighting. No text. Expression: shy and embarrassed, blushing cheeks, small smile looking slightly away.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Shy",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 12,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        1870,
+        720
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 11,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            25
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "Head-and-shoulders close-up portrait of exactly the same character facing the viewer: same face, hairstyle, ears, outfit and art style, on a plain pure white background with soft even lighting. No text. Expression: confident smug smirk with one raised eyebrow.",
+        "1:1",
+        "Qwen-Image-2.1-Turbo"
+      ],
+      "title": "Smug",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 13,
+      "type": "ImageStitch",
+      "pos": [
+        2360,
+        0
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 12
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 13,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "ImageStitch",
+      "pos": [
+        2360,
+        180
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 14
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 15,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "ImageStitch",
+      "pos": [
+        2360,
+        360
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 16
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 17,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "ImageStitch",
+      "pos": [
+        2360,
+        560
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 18
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 19,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "ImageStitch",
+      "pos": [
+        2360,
+        740
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 20
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 21,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            26
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "ImageStitch",
+      "pos": [
+        2660,
+        560
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 22
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 23,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 19,
+      "type": "ImageStitch",
+      "pos": [
+        2660,
+        740
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 24
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 25,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            27
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 20,
+      "type": "ImageStitch",
+      "pos": [
+        2660,
+        920
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 26
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 27,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            29
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "down",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 21,
+      "type": "ImageStitch",
+      "pos": [
+        2660,
+        0
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 28
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 29,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            30
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "down",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "SaveImage",
+      "pos": [
+        2960,
+        0
+      ],
+      "size": [
+        340,
+        560
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 30
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "character_sheet/sheet"
+      ],
+      "title": "Save character sheet"
+    },
+    {
+      "id": 23,
+      "type": "SaveImage",
+      "pos": [
+        2960,
+        620
+      ],
+      "size": [
+        340,
+        440
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 31
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "character_sheet/front"
+      ],
+      "title": "Save front view"
+    }
+  ],
+  "links": [
+    [
+      1,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      3,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      2,
+      0,
+      6,
+      1,
+      "IMAGE"
+    ],
+    [
+      6,
+      3,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      7,
+      3,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      3,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      3,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      3,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      3,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      3,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      4,
+      0,
+      13,
+      1,
+      "IMAGE"
+    ],
+    [
+      14,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      5,
+      0,
+      14,
+      1,
+      "IMAGE"
+    ],
+    [
+      16,
+      14,
+      0,
+      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      17,
+      6,
+      0,
+      15,
+      1,
+      "IMAGE"
+    ],
+    [
+      18,
+      7,
+      0,
+      16,
+      0,
+      "IMAGE"
+    ],
+    [
+      19,
+      8,
+      0,
+      16,
+      1,
+      "IMAGE"
+    ],
+    [
+      20,
+      16,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      21,
+      9,
+      0,
+      17,
+      1,
+      "IMAGE"
+    ],
+    [
+      22,
+      10,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      23,
+      11,
+      0,
+      18,
+      1,
+      "IMAGE"
+    ],
+    [
+      24,
+      18,
+      0,
+      19,
+      0,
+      "IMAGE"
+    ],
+    [
+      25,
+      12,
+      0,
+      19,
+      1,
+      "IMAGE"
+    ],
+    [
+      26,
+      17,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      27,
+      19,
+      0,
+      20,
+      1,
+      "IMAGE"
+    ],
+    [
+      28,
+      15,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ],
+    [
+      29,
+      20,
+      0,
+      21,
+      1,
+      "IMAGE"
+    ],
+    [
+      30,
+      21,
+      0,
+      22,
+      0,
+      "IMAGE"
+    ],
+    [
+      31,
+      3,
+      0,
+      23,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. Your character",
+      "bounding": [
+        0,
+        -60,
+        420,
+        520
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. Clean front view",
+      "bounding": [
+        460,
+        -60,
+        440,
+        380
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3. Turnaround views",
+      "bounding": [
+        940,
+        -60,
+        440,
+        1140
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4. Expressions",
+      "bounding": [
+        1420,
+        -60,
+        880,
+        1140
+      ],
+      "color": "#b58b2a",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "5. Sheet",
+      "bounding": [
+        2340,
+        -60,
+        960,
+        1140
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.55,
+      "offset": [
+        700,
+        160
+      ]
+    }
+  },
+  "version": 0.4
+}

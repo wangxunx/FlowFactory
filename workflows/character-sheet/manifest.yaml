@@ -1,0 +1,21 @@
+id: character-sheet
+name: Character Sheet
+version: 1.0.0
+category:
+  - character-story
+tags:
+  - image
+  - character-sheet
+  - turnaround
+  - expressions
+  - qwen-image
+node_pack: amd-qwen-image-21
+min_node_pack_version: 2.0.0
+featured: true
+files:
+  - workflow: character-sheet-from-image.json
+    title: Character Sheet - from Image
+  - workflow: character-sheet-from-text.json
+    title: Character Sheet - from Text
+sample_inputs:
+  - assets/character_sheet_model.jpg
