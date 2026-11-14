@@ -23,6 +23,14 @@ ComfyUI core nodes plus the AMD Video Factory nodes, so no GPU and no model down
 
 ![Product Scenes](workflows/product-scenes/assets/example.jpg)
 
+### Portraits
+
+| Workflow | What it does | Video Factory node |
+|---|---|---|
+| [Anime to Real](workflows/anime-to-real/) | An anime, cartoon or game character image becomes a real photo with the same pose, framing and scene | Qwen-Image 2.1 |
+
+![Anime to Real](workflows/anime-to-real/assets/example.jpg)
+
 ## Video Factory nodes
 
 The workflows call cloud models through the AMD Video Factory nodes. Install the pack a workflow needs from the

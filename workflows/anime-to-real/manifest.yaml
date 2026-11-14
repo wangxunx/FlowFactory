@@ -1,0 +1,18 @@
+id: anime-to-real
+name: Anime to Real
+version: 1.0.0
+category:
+  - portrait
+tags:
+  - image
+  - anime-to-real
+  - style-transfer
+  - qwen-image
+node_pack: amd-qwen-image-21
+min_node_pack_version: 2.0.0
+featured: true
+files:
+  - workflow: anime-to-real.json
+    title: Anime to Real
+sample_inputs:
+  - assets/anime_sample.jpg

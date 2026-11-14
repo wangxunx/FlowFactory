@@ -22,6 +22,14 @@
 
 ![商品场景图](workflows/product-scenes/assets/example.jpg)
 
+### 人像与写真
+
+| 工作流 | 作用 | Video Factory 节点 |
+|---|---|---|
+| [动漫转真人](workflows/anime-to-real/) | 动漫、卡通或游戏角色图变成真人照片，姿势、取景和场景不变 | Qwen-Image 2.1 |
+
+![动漫转真人](workflows/anime-to-real/assets/example.jpg)
+
 ## Video Factory 节点
 
 工作流通过 AMD Video Factory 节点调用云端模型。用 ComfyUI Manager 安装工作流需要的节点包；也可以直接打开工作流，缺节点时 ComfyUI 会提示安装。

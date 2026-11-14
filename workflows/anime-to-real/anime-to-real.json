@@ -1,0 +1,434 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 7,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "MarkdownNote",
+      "pos": [
+        -560,
+        0
+      ],
+      "size": [
+        500,
+        900
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "## Anime to Real\n\nTurns an anime, cartoon or game character image into a real photo with the same composition: the same pose, framing and scene, with the character as a real person and the background as a real place. A side-by-side of the original and the photo is saved for sharing.\n\n**How to use:** load your image in **Load Image**, set **aspect_ratio** on the Qwen node to the shape of your image (the photo is reframed to it), and run. The sample is a generated character.\n\n**Extra instructions** are added to the end of the prompt. Leave them empty, or steer the result in a few words, for example `a man`, `Western features`, or `East Asian features`.\n\n**What you get** in `output/anime_to_real/`: `real_*.png` and `before_after_*.png`.\n\n**Rerun:** the seed is fixed, so running again with the same image and instructions reuses the last result. Change the `seed` for a new take, also when the result still looks drawn or 3D-rendered.\n\n**Model:** Qwen-Image 2.1 Turbo, 1 credit per run. Chibi characters keep their big-head proportions.\n\n**One-time setup.** This workflow uses the Video Factory Qwen-Image 2.1 node; if ComfyUI reports it missing, install it from the Manager. Register at https://h3.oneclickamd.ai/?src=anime-to-real, then save your key to `h3_gateway_api_key.txt` in the ComfyUI user directory (or set `H3_GATEWAY_API_KEY`). On the Windows Desktop app use the file, for example `C:\\Users\\<you>\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Installs\\ComfyUI\\ComfyUI\\user\\h3_gateway_api_key.txt`. If the key is missing, the first node fails right away and names the exact file it looked for.\n\n**Your key is not in this workflow**, so the workflow and the images it saves are safe to share.\n\n**From FlowFactory:** more ready-to-run workflows at https://github.com/wangxunx/FlowFactory\n\n---\n\n**中文说明：** 在 Load Image 里换成你的动漫、卡通或游戏角色图，把 Qwen 节点的 aspect_ratio 设成和原图一样的比例（输出会按这个比例重新取景），然后运行。结果保持原图的构图、姿势和场景，角色变成真人，背景变成真实场景。输出在 `output/anime_to_real/`：真人照片 `real_*.png`，外加一张原图和真人照片的左右对比图 `before_after_*.png`。**补充要求**会追加到提示词末尾，可以留空，也可以用几个词调整，例如 `a man`（男性）、`Western features`（欧美面孔）、`East Asian features`（东亚面孔）。seed 固定，图和补充要求不变时再次运行会复用上次的结果；想换一版，或者结果看起来还像画的、像 3D 渲染，就改 seed。模型是 Qwen-Image 2.1 Turbo，一次运行 1 credit。Q 版角色会保留大头小身的比例，不推荐。\n\n更多开箱即用的工作流见 FlowFactory：https://github.com/wangxunx/FlowFactory"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        20,
+        0
+      ],
+      "size": [
+        380,
+        500
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            3,
+            5
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "anime_sample.jpg",
+        "image"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "PrimitiveStringMultiline",
+      "pos": [
+        20,
+        540
+      ],
+      "size": [
+        380,
+        220
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "Extra instructions (optional)",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 4,
+      "type": "StringConcatenate",
+      "pos": [
+        480,
+        0
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "string_b",
+          "type": "STRING",
+          "widget": {
+            "name": "string_b"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "StringConcatenate"
+      },
+      "widgets_values": [
+        "Transform the image to a realistic photograph. Keep exactly the same composition, framing, camera angle, pose and background layout as the image; only the style changes from a drawing to a real photo. The character becomes a real person with the same hairstyle and hair color, eye color, facial expression and mouth shape, outfit, colors, accessories and anything they hold. Normal human body proportions, a real human face with visible skin pores and natural imperfections, real hair with flyaway strands instead of a wig, little or no makeup, and real fabric with creases and seams. The background becomes a real photographed place with real depth, light and detail. Not cosplay, not a doll, not a 3D render, not a painting, not anime. No text or watermark.",
+        "",
+        " "
+      ],
+      "title": "Prompt"
+    },
+    {
+      "id": 5,
+      "type": "AMDQwenImage21TextToImage",
+      "pos": [
+        900,
+        0
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images.image_1",
+          "type": "IMAGE",
+          "link": 3,
+          "shape": 7
+        },
+        {
+          "name": "images.image_2",
+          "type": "IMAGE",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4,
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "amd-qwen-image-21",
+        "ver": "2.0.1",
+        "Node name for S&R": "AMDQwenImage21TextToImage"
+      },
+      "widgets_values": [
+        "",
+        "3:4",
+        "Qwen-Image-2.1-Turbo",
+        5,
+        "fixed"
+      ],
+      "title": "Anime to real",
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 6,
+      "type": "SaveImage",
+      "pos": [
+        1320,
+        0
+      ],
+      "size": [
+        380,
+        500
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "anime_to_real/real"
+      ],
+      "title": "Save real photo"
+    },
+    {
+      "id": 7,
+      "type": "ImageStitch",
+      "pos": [
+        1780,
+        0
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 6,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "ImageStitch"
+      },
+      "widgets_values": [
+        "right",
+        true,
+        0,
+        "white"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "SaveImage",
+      "pos": [
+        1780,
+        180
+      ],
+      "size": [
+        420,
+        360
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.39.0",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "anime_to_real/before_after"
+      ],
+      "title": "Save before and after"
+    }
+  ],
+  "links": [
+    [
+      1,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      4,
+      0,
+      5,
+      2,
+      "STRING"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      5,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      2,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      5,
+      0,
+      7,
+      1,
+      "IMAGE"
+    ],
+    [
+      7,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. Your character",
+      "bounding": [
+        0,
+        -60,
+        420,
+        860
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. Real photo",
+      "bounding": [
+        460,
+        -60,
+        1260,
+        620
+      ],
+      "color": "#8A8",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3. Before and after",
+      "bounding": [
+        1760,
+        -60,
+        460,
+        620
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.55,
+      "offset": [
+        700,
+        160
+      ]
+    }
+  },
+  "version": 0.4
+}

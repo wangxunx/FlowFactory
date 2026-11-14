@@ -55,11 +55,26 @@ class Graph:
     def group(self, title, x, y, w, h, color):
         self.groups.append({"id": len(self.groups) + 1, "title": title, "bounding": [x, y, w, h], "color": color, "font_size": 24, "flags": {}})
 
-    def qwen(self, pos, title, prompt, aspect_ratio, refs):
-        # Autogrow shows one empty socket after the connected ones, up to three.
+    def qwen(self, pos, title, prompt, aspect_ratio, refs, seed=None):
+        # Autogrow shows one empty socket after the connected ones, up to three. A seed (node pack 2.1.0 and later;
+        # older versions ignore it) stays fixed so a rerun reuses the cached result.
         inputs = [(f"images.image_{i}", "IMAGE", True) for i in range(1, min(refs + 1, 3) + 1)]
-        return self.node(QWEN, pos, (400, 300), inputs, [("IMAGE", "IMAGE")], [prompt, aspect_ratio, TURBO],
-                         title=title, colored=True)
+        widgets = [prompt, aspect_ratio, TURBO] + ([] if seed is None else [seed, "fixed"])
+        return self.node(QWEN, pos, (400, 300), inputs, [("IMAGE", "IMAGE")], widgets, title=title, colored=True)
+
+    def text(self, pos, size, value, title):
+        return self.node("PrimitiveStringMultiline", pos, size, [], [("STRING", "STRING")], [value], title=title, colored=True)
+
+    def concat(self, pos, string_a, string_b_node, delimiter, title):
+        """Joins a fixed prompt with another node's text, for nodes that share user-written additions."""
+        node_id = self.node("StringConcatenate", pos, (400, 200), [], [("STRING", "STRING")], [string_a, "", delimiter], title=title)
+        self.widget_input(node_id, "string_b", "STRING")
+        self.link(string_b_node, 0, node_id, "string_b")
+        return node_id
+
+    def widget_input(self, node_id, name, type_):
+        """Turns a widget into an input socket so a link can drive it."""
+        self.nodes[node_id - 1]["inputs"].append({"name": name, "type": type_, "widget": {"name": name}, "link": None})
 
     def stitch(self, pos, a, b, direction):
         node_id = self.node("ImageStitch", pos, (270, 150), [("image1", "IMAGE", False), ("image2", "IMAGE", True)],
@@ -81,7 +96,10 @@ class Graph:
 
 
 WIDGETS = {
-    QWEN: ["prompt", "aspect_ratio", "model", "model.steps"],
+    # qwen() always uses Turbo, which has no steps widget after model.
+    QWEN: ["prompt", "aspect_ratio", "model", "seed"],
+    "PrimitiveStringMultiline": ["value"],
+    "StringConcatenate": ["string_a", "string_b", "delimiter"],
     "ImageStitch": ["direction", "match_image_size", "spacing_width", "spacing_color"],
     "LoadImage": ["image"],
     "SaveImage": ["filename_prefix"],
