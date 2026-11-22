@@ -10,11 +10,11 @@ SOURCE = "**From FlowFactory:** more ready-to-run workflows at https://github.co
 SOURCE_ZH = "更多开箱即用的工作流见 FlowFactory：https://github.com/wangxunx/FlowFactory"
 
 
-def key_setup(workflow_id):
+def key_setup():
     return (
         "**One-time setup.** This workflow uses the Video Factory Qwen-Image 2.1 node; if ComfyUI reports it missing, "
-        f"install it from the Manager. Register at https://h3.oneclickamd.ai/?src={workflow_id}, then save your key to `h3_gateway_api_key.txt` in the ComfyUI user directory (or set `H3_GATEWAY_API_KEY`). "
-        "On the Windows Desktop app use the file, for example "
+        "install it from the Manager. Register at https://h3.oneclickamd.ai/?utm_source=comfyui, then save your key to `h3_gateway_api_key.txt` in the ComfyUI user directory. "
+        "On the Windows Desktop app the file goes in Desktop's install directory, for example "
         "`C:\\Users\\<you>\\AppData\\Local\\Comfy-Desktop\\ComfyUI-Installs\\ComfyUI\\ComfyUI\\user\\h3_gateway_api_key.txt`. "
         "If the key is missing, the first node fails right away and names the exact file it looked for.\n\n"
         "**Your key is not in this workflow**, so the workflow and the images it saves are safe to share."

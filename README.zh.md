@@ -39,7 +39,7 @@
 | Qwen-Image 2.1 | [ComfyUI-AMD-Qwen-Image-2.1](https://github.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1) | 2.0.0 或更新 |
 | MiniMax H3 | [ComfyUI-AMD-MiniMaxH3](https://github.com/wangxunx/ComfyUI-AMD-MiniMaxH3) | 1.0.0 或更新 |
 
-所有节点包共用一个 API key。在 [h3.oneclickamd.ai](https://h3.oneclickamd.ai/?src=flowfactory) 注册，按 Qwen-Image 2.1 节点包的 README 配好 key。
+所有节点包共用一个 API key。在 [h3.oneclickamd.ai](https://h3.oneclickamd.ai/?utm_source=comfyui) 注册，按 Qwen-Image 2.1 节点包的 README 配好 key。
 
 ## 获取工作流
 

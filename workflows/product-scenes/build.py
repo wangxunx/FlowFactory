@@ -67,7 +67,7 @@ NOTE = (
     "for example a Lunar New Year table instead of a holiday gift. Keep the rest of the prompt: it keeps the "
     "product, its label and its lighting right. Run again and only the changed scenes are regenerated.\n\n"
     "**Model:** every node uses `Qwen-Image-2.1-Turbo`, and all eight run in parallel. Switch a node to "
-    "`Qwen-Image-2.1` to get the `steps` slider.\n\n" + key_setup("product-scenes") + "\n\n" + SOURCE + "\n\n---\n\n"
+    "`Qwen-Image-2.1` to get the `steps` slider.\n\n" + key_setup() + "\n\n" + SOURCE + "\n\n---\n\n"
     "**中文说明：** 在 Load Image 里换成你的商品照片（手机随手拍即可），直接运行。一张图放一件商品、标签朝向镜头效果最好。"
     "输出在 `output/product_scenes/`，每个场景一张方图：白底主图、展台棚拍、桌面生活场景、阳光树影、手持、细节特写、户外、节日。"
     "商品的外形、颜色、logo 和标签文字在每张图里保持不变，光影随场景重新匹配。"

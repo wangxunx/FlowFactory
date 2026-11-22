@@ -41,7 +41,7 @@ ComfyUI Manager, or let ComfyUI offer it when you open the workflow and a node i
 | Qwen-Image 2.1 | [ComfyUI-AMD-Qwen-Image-2.1](https://github.com/wangxunx/ComfyUI-AMD-Qwen-Image-2.1) | 2.0.0 or later |
 | MiniMax H3 | [ComfyUI-AMD-MiniMaxH3](https://github.com/wangxunx/ComfyUI-AMD-MiniMaxH3) | 1.0.0 or later |
 
-All packs share one API key. Register at [h3.oneclickamd.ai](https://h3.oneclickamd.ai/?src=flowfactory) and configure
+All packs share one API key. Register at [h3.oneclickamd.ai](https://h3.oneclickamd.ai/?utm_source=comfyui) and configure
 the key as the Qwen-Image 2.1 pack's README describes.
 
 ## Getting a workflow

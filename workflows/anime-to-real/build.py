@@ -31,7 +31,7 @@ NOTE = (
     "**Rerun:** the seed is fixed, so running again with the same image and instructions reuses the last result. "
     "Change the `seed` for a new take, also when the result still looks drawn or 3D-rendered.\n\n"
     "**Model:** Qwen-Image 2.1 Turbo, 1 credit per run. Chibi characters keep their big-head proportions.\n\n"
-    + key_setup("anime-to-real") + "\n\n" + SOURCE +
+    + key_setup() + "\n\n" + SOURCE +
     "\n\n---\n\n"
     "**中文说明：** 在 Load Image 里换成你的动漫、卡通或游戏角色图，把 Qwen 节点的 aspect_ratio 设成和原图一样的比例"
     "（输出会按这个比例重新取景），然后运行。结果保持原图的构图、姿势和场景，角色变成真人，背景变成真实场景。"

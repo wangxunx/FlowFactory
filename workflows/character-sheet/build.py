@@ -57,7 +57,7 @@ EXPRESSIONS = [
     ("Smug", "confident smug smirk with one raised eyebrow"),
 ]
 
-KEY_SETUP = key_setup("character-sheet")
+KEY_SETUP = key_setup()
 COMMON_NOTES = (
     "**What you get** in `output/character_sheet/`:\n\n"
     "- `sheet_*.png`: front, three-quarter, side and back views on top, six expressions below\n"
